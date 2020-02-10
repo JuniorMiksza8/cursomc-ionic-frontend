@@ -19,9 +19,7 @@ export class CategoriasPage {
     this.categoriaService.findAll()
     .subscribe(response =>{
       this.Items = response;  
-    },error =>{
-      console.log(error);
-    })
+    },error =>{});
   }
 
   
