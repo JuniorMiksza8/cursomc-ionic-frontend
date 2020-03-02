@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder,Validators } from '@angular/forms';
 import { CidadeService } from '../../services/domain/cidade.service';
 import { EstadoService } from '../../services/domain/estado.service';
 import { CidadeDTO } from '../../models/estado.dto';
 import { EstadoDTO } from '../../models/cidade.dto';
+import { ClienteService } from '../../services/domain/cliente.service';
 
 @IonicPage()
 @Component({
@@ -17,12 +18,12 @@ export class SignupPage {
   estados : EstadoDTO[];
   cidades : CidadeDTO[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public formBuilder:FormBuilder,public cidadeService : CidadeService,public estadoService : EstadoService) {
+  constructor(public navCtrl: NavController,public alertCtrl : AlertController, public navParams: NavParams,public formBuilder:FormBuilder,public cidadeService : CidadeService,public estadoService : EstadoService,public clienteService : ClienteService) {
     this.formGroup = this.formBuilder.group({
       nome : ['teste',[Validators.required,Validators.minLength(5),Validators.maxLength(120)]],
       email : ['',[Validators.required,Validators.email]],
       tipo : ['',[Validators.required]],
-      cpfOuCnpj : ['',[Validators.required,Validators.minLength(11)]],
+      cpfOuCpnj : ['',[Validators.required,Validators.minLength(11)]],
       senha : ['',[Validators.required]],
       logradouro : ['',[Validators.required]],
       numero : ['',[Validators.required]],
@@ -38,7 +39,27 @@ export class SignupPage {
   }
 
   signupUser(){
-    console.log("enviou o form")
+    console.log(this.formGroup.value);
+    this.clienteService.insert(this.formGroup.value).subscribe(response =>{
+      this.showInsertOk();
+    },error =>{});
+  }
+
+  showInsertOk(){
+    let alert = this.alertCtrl.create({
+      title : 'Successo',
+      message : 'Cadastro efetuado com sucesso',
+      enableBackdropDismiss : false,
+      buttons: [
+        {
+          text : 'Ok',
+          handler : ()=>{
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   ionViewDidLoad(){
