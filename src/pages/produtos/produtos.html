@@ -11,13 +11,15 @@
 <ion-content padding>
 
   <ion-list>
-    <button ion-item *ngFor="let item of items">
+
+    <button ion-item *ngFor="let item of items" (click)="showDetail()">
       <ion-thumbnail item-start>
         <img src="../../assets/imgs/produtoteste.jpg">
       </ion-thumbnail>
       <h2>{{item.nome}}</h2>
       <p>{{item.preco | currency}}</p>
     </button>
+
   </ion-list>
 
 </ion-content>
