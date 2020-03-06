@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CartItem } from '../../models/cart-item';
 import { CartService } from '../../services/domain/cart.service';
+import { ProdutoDTO } from '../../models/produto.dto';
 
 
 @IonicPage()
@@ -19,6 +20,26 @@ export class CartPage {
   ionViewDidLoad() {
     let cart = this.cartService.getCart();
     this.items = cart.itens;
+  }
+
+  removeItem(produto : ProdutoDTO){
+    this.items = this.cartService.removeProduto(produto).itens;
+  }
+
+  decreaseQuantity(produto : ProdutoDTO){
+    this.items = this.cartService.decreaseQuantity(produto).itens;
+  }
+
+  increaseQuantity(produto : ProdutoDTO){
+    this.items = this.cartService.increaseQuantity(produto).itens;
+  }
+
+  total() : number{
+    return this.cartService.total();
+  }
+
+  goOn(){
+    this.navCtrl.setRoot('CategoriasPage');
   }
 
 }
