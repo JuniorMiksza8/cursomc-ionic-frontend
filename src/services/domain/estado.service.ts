@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { EstadoDTO } from "../../models/cidade.dto";
+import { EstadoDTO } from "../../models/estado.dto";
 import { API_CONFIG } from "../../config/api.config";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
