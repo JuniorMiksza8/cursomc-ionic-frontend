@@ -37,7 +37,7 @@
       continuar comprando
     </button>
 
-    <button ion-button block color="secondary" outline (click)="checkout()">
+    <button ion-button block color="secondary" *ngIf="total() > 0" outline (click)="checkout()">
       finalizar pedido
     </button>
 

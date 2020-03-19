@@ -1,3 +1,4 @@
+import { PedidoService } from './../../services/domain/pedido.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PedidoDTO } from '../../models/pedido.dto';
@@ -19,8 +20,14 @@ export class OrderConfirmationPage {
   cliente : ClienteDTO;
   endereco : EnderecoDTO;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public cartService : CartService,public clienteService : ClienteService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public cartService : CartService,public clienteService : ClienteService,public pedidoService : PedidoService) {
     this.pedido = this.navParams.get('pedido');
+
+    
+  }
+
+  ionViewDidLoad() {
+    this.cartItens = this.cartService.getCart().itens;
 
     this.clienteService.findById(this.pedido.cliente.id).subscribe(response =>{
       this.cliente = response as ClienteDTO;
@@ -30,17 +37,29 @@ export class OrderConfirmationPage {
     })
   }
 
-  ionViewDidLoad() {
-    this.cartItens = this.cartService.getCart().itens;
-  }
-
   private findEndereco(id : string,list: EnderecoDTO[]): EnderecoDTO{
     let position = list.findIndex(x => x.id == id);
     return list[position];
   }
 
-  total(){
+  total() : number{
     return this.cartService.total();
+  }
+
+  checkout(){
+    this.pedidoService.insert(this.pedido)
+    .subscribe(response =>{
+      console.log(response.headers.get('location'));
+      this.cartService.createOrClearCart();
+    },error=>{
+      if(error.status == 403){
+        this.navCtrl.setRoot('HomePage');
+      }
+    });
+  }
+
+  back(){
+    this.navCtrl.setRoot('CartPage');
   }
 
 }
